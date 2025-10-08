@@ -27,6 +27,14 @@ let trips = [
     endDate: '2025-11-15',
     notes: 'Autumn leaves & sushi 🍣',
   },
+  {
+    id: uuid(),
+    name: 'Virginia Trip',
+    destination: 'Winchester, VA',
+    startDate: '2026-11-02',
+    endDate: '2026-11-15',
+    notes: 'Apples and meth',
+  },
 ];
 
 // Routes
@@ -45,6 +53,34 @@ app.post('/trips', (req, res) => {
   const newTrip = { id: uuid(), name, destination, startDate, endDate, notes };
   trips.unshift(newTrip);
   res.status(201).json(newTrip);
+});
+
+// UPDATE trip
+app.put('/trips/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, destination, startDate, endDate, notes } = req.body;
+  const index = trips.findIndex((t) => t.id === id);
+  if (index === -1) return res.status(404).json({ error: 'Not found' });
+
+  trips[index] = {
+    ...trips[index],
+    name,
+    destination,
+    startDate,
+    endDate,
+    notes,
+  };
+  res.json(trips[index]);
+});
+
+// DELETE trip
+app.delete('/trips/:id', (req, res) => {
+  const { id } = req.params;
+  const index = trips.findIndex((t) => t.id === id);
+  if (index === -1) return res.status(404).json({ error: 'Not found' });
+
+  const deleted = trips.splice(index, 1)[0];
+  res.json(deleted);
 });
 
 app.listen(PORT, () => {

@@ -7,6 +7,7 @@ import App from './App';
 import TripsIndex from './pages/trips';
 import TripDetails from './pages/trips/[id]';
 import NewTrip from './pages/trips/new';
+import EditTrip from './pages/trips/edit';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
       { index: true, element: <TripsIndex /> },
       { path: 'trips/new', element: <NewTrip /> },
       { path: 'trips/:id', element: <TripDetails /> },
+      { path: 'trips/:id/edit', element: <EditTrip /> },
     ],
   },
 ]);
