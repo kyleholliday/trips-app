@@ -1,26 +1,29 @@
-import { Outlet, Link, NavLink } from 'react-router-dom';
+import { Outlet, useLocation, useOutlet } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 
-export default function App() {
+export default function RootLayout() {
+  const location = useLocation();
+  const outlet = useOutlet();
+
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-900">
-      <header className="border-b bg-white">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link to="/" className="text-xl font-semibold">
-            Trips
-          </Link>
-          <div className="flex gap-4">
-            <NavLink to="/" className="hover:underline">
-              Home
-            </NavLink>
-            <NavLink to="/trips/new" className="hover:underline">
-              New Trip
-            </NavLink>
-          </div>
-        </nav>
-      </header>
-      <main className="mx-auto max-w-6xl p-4">
-        <Outlet />
-      </main>
+    <div className="min-h-screen bg-gray-50">
+      <AnimatePresence mode="wait">
+        {outlet && (
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{
+              duration: 0.35,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="h-full"
+          >
+            {outlet}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

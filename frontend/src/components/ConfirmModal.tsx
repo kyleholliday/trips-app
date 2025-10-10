@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface ConfirmModalProps {
   open: boolean;
@@ -14,7 +14,7 @@ export default function ConfirmModal({
   message = 'Are you sure?',
 }: ConfirmModalProps) {
   return (
-    <AnimatePresence>
+    <div>
       {open && (
         <motion.div
           className="fixed inset-0 flex items-center justify-center bg-black/40 z-50"
@@ -46,6 +46,6 @@ export default function ConfirmModal({
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </div>
   );
 }

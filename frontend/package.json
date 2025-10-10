@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "BROWSER=firefox vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -47,6 +47,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "framer-motion": "^12.23.22"
+    "framer-motion": "^12.23.22",
+    "lucide-react": "^0.545.0"
   }
 }

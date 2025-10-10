@@ -1,3 +1,6 @@
+import { Trip } from '@/types/trip';
+import { Link } from 'react-router-dom';
+
 export default function TripCard({ trip }: { trip: Trip }) {
   return (
     <Link

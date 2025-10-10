@@ -29,9 +29,9 @@ export const handlers = [
       : new HttpResponse('Not found', { status: 404 });
   }),
   http.post('/api/trips', async ({ request }) => {
-    const body = await request.json();
-    const newTrip = { ...body, id: uuid() };
-    trips.unshift(newTrip);
+    const body = (await request.json()) as Record<string, unknown>; // or as any
+    const newTrip = { ...(body as object), id: uuid() };
+    trips.unshift(newTrip as any);
     return HttpResponse.json(newTrip, { status: 201 });
   }),
 ];
