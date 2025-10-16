@@ -1,5 +1,6 @@
 import { Outlet, useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import Navbar from './components/Navbar';
 
 export default function RootLayout() {
   const location = useLocation();
@@ -7,6 +8,7 @@ export default function RootLayout() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Navbar />
       <AnimatePresence mode="wait">
         {outlet && (
           <motion.div

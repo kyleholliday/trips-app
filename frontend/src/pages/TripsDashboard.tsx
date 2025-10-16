@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import type { Variants } from 'framer-motion';
+import { useState, useMemo } from 'react';
+import SortMenu, { type SortKey } from '../components/SortMenu';
 
 type Trip = {
   id: string;
@@ -40,7 +42,6 @@ const card: Variants = {
 
 export default function TripsDashboard() {
   const navigate = useNavigate();
-
   const {
     data: trips,
     isLoading,
@@ -49,6 +50,26 @@ export default function TripsDashboard() {
     queryKey: ['trips'],
     queryFn: async () => (await api.get('/trips')).data,
   });
+
+  const [sortBy, setSortBy] = useState<SortKey>('startAsc');
+
+  const sortedTrips = useMemo(() => {
+    if (!trips) return [];
+    return [...trips].sort((a, b) => {
+      switch (sortBy) {
+        case 'startAsc':
+          return +new Date(a.startDate) - +new Date(b.startDate);
+        case 'startDesc':
+          return +new Date(b.startDate) - +new Date(a.startDate);
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'destination':
+          return a.destination.localeCompare(b.destination);
+        default:
+          return 0;
+      }
+    });
+  }, [trips, sortBy]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -82,14 +103,19 @@ export default function TripsDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-10">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Your Trips</h1>
-          <p className="text-gray-500 text-lg">
-            Plan, view, and edit your adventures
-          </p>
+        <header className="mb-10 flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              Your Trips
+            </h1>
+            <p className="text-gray-500 text-lg">
+              Plan, view, and edit your adventures
+            </p>
+          </div>
+          <SortMenu value={sortBy} onChange={setSortBy} />
         </header>
 
-        {trips && trips.length > 0 ? (
+        {sortedTrips && sortedTrips.length > 0 ? (
           <motion.div
             variants={container}
             initial="hidden"
@@ -97,11 +123,15 @@ export default function TripsDashboard() {
             className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
             style={{ willChange: 'opacity' }}
           >
-            {trips.map((trip) => (
+            {sortedTrips.map((trip) => (
               <motion.article
                 key={trip.id}
+                layout="position"
+                transition={{
+                  layout: { type: 'spring', stiffness: 160, damping: 18 },
+                }}
                 variants={card}
-                whileHover={{ scale: 1.02, y: -4 }}
+                whileHover={{ scale: 1.01, y: -4 }}
                 onClick={() => navigate(`/trips/${trip.id}`)}
                 className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 cursor-pointer group"
                 style={{ willChange: 'transform, opacity' }}
@@ -162,7 +192,7 @@ export default function TripsDashboard() {
         )}
 
         {/* Floating action button */}
-        {trips && trips.length > 0 && (
+        {/* {trips && trips.length > 0 && (
           <motion.button
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -179,7 +209,7 @@ export default function TripsDashboard() {
           >
             <Plus className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
           </motion.button>
-        )}
+        )} */}
       </div>
     </div>
   );

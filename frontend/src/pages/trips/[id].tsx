@@ -22,7 +22,7 @@ export default function TripDetails() {
     mutationFn: deleteTrip,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trips'] });
-      navigate('/dashboard');
+      navigate('/');
     },
   });
 
@@ -72,16 +72,14 @@ export default function TripDetails() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Back button */}
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/')}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span className="text-sm font-medium">Back to trips</span>
           </button>
 
-          {/* Main card */}
           <article className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             {/* Header section */}
             <div className="p-8 sm:p-10 border-b border-gray-100">
@@ -141,7 +139,6 @@ export default function TripDetails() {
             </div>
           </article>
         </motion.div>
-
         <ConfirmModal
           open={showConfirm}
           onCancel={() => setShowConfirm(false)}
